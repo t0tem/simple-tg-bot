@@ -74,6 +74,6 @@ def check_save_winner(context, chat_id, users):
         old_winner = get_name(users, cur_winner['winner_id'])
         context.bot.send_message(
             chat_id=chat_id,
-            text=f"про сегодня уже все понятно: победил(-а) {old_winner}. Возвращайся завтра \N{winking face}"
+            text=f"Cегодня уже все понятно: победил(-а) {old_winner}. Возвращайся завтра \N{winking face}"
         )
 
