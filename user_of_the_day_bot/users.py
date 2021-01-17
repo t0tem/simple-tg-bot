@@ -70,12 +70,11 @@ def check_delete_user(context, chat_id, effective_user):
     if user_id_str in users:
 
         # удаляем и говорим что удален
-        del users[user_id_str]
-
         context.bot.send_message(
             chat_id=chat_id,
             text=f'ты больше не играешь, {get_name(users, user_id_str)} \N{slightly frowning face} приходи еще!'
         )
+        del users[user_id_str]
     else:
         # иначе говорим что и не было
         context.bot.send_message(
