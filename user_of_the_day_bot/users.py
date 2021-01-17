@@ -20,6 +20,15 @@ def save_users(chat_id, users):
         json.dump(users, f)
 
 
+def get_name(users, user_id_str):
+    fullname = users[user_id_str]['fullname']
+    if users[user_id_str]['name']:
+        name = users[user_id_str]['name']
+        return f'{fullname} ({name})'
+    else:
+        return fullname
+
+
 def check_reg_user(context, chat_id, effective_user):
 
     # грузим список юзеров, зарегеных из этого чата
@@ -32,7 +41,7 @@ def check_reg_user(context, chat_id, effective_user):
         # отвечаем что уже есть
         context.bot.send_message(
             chat_id=chat_id,
-            text=f'ты уже есть в списке игроков, {effective_user.name}!'
+            text=f'ты уже есть в списке игроков, {get_name(users, user_id_str)}!'
         )
     else:
         # инача добавляем и говорим что добавлен
@@ -44,7 +53,7 @@ def check_reg_user(context, chat_id, effective_user):
         }
         context.bot.send_message(
             chat_id=chat_id,
-            text=f'теперь ты в игре, {effective_user.name}!'
+            text=f'теперь ты в игре, {get_name(users, user_id_str)}!'
         )
 
     # пересохраняем юзеров
@@ -65,26 +74,17 @@ def check_delete_user(context, chat_id, effective_user):
 
         context.bot.send_message(
             chat_id=chat_id,
-            text=f'ты больше не играешь, {effective_user.name} \N{slightly frowning face} приходи еще!'
+            text=f'ты больше не играешь, {get_name(users, user_id_str)} \N{slightly frowning face} приходи еще!'
         )
     else:
         # иначе говорим что и не было
         context.bot.send_message(
             chat_id=chat_id,
-            text=f'хм, а тебя и так нет среди игроков, {effective_user.name}.'
+            text=f'хм, а тебя и так нет среди игроков, {get_name(users, user_id_str)}.'
         )
 
     # пересохраняем юзеров
     save_users(chat_id, users)
-
-
-def get_name(users, user_id_str):
-    fullname = users[user_id_str]['fullname']
-    if users[user_id_str]['name']:
-        name = users[user_id_str]['name']
-        return f'{fullname} ({name})'
-    else:
-        return fullname
 
 
 def list_users(context, chat_id):
