@@ -48,7 +48,7 @@ def check_reg_user(context, chat_id, effective_user):
         users[user_id_str] = {
             'id': effective_user.id,
             'fullname': effective_user.full_name,
-            'name': effective_user.name,
+            'username': effective_user.username,
             'win_count': 0,
         }
         context.bot.send_message(
