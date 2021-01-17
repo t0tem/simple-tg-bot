@@ -41,7 +41,7 @@ def check_reg_user(context, chat_id, effective_user):
         # отвечаем что уже есть
         context.bot.send_message(
             chat_id=chat_id,
-            text=f'ты уже есть в списке игроков, {get_name(users, user_id_str)}!'
+            text=f'ты уже есть в списке игроков, {effective_user.full_name}!'
         )
     else:
         # инача добавляем и говорим что добавлен
@@ -53,7 +53,7 @@ def check_reg_user(context, chat_id, effective_user):
         }
         context.bot.send_message(
             chat_id=chat_id,
-            text=f'теперь ты в игре, {get_name(users, user_id_str)}!'
+            text=f'теперь ты в игре, {effective_user.full_name}!'
         )
 
     # пересохраняем юзеров
