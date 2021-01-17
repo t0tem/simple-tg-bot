@@ -5,7 +5,7 @@ import time
 
 from user_of_the_day_bot import settings
 from user_of_the_day_bot.utils import get_cur_date, get_date, get_now
-from user_of_the_day_bot.users import save_users
+from user_of_the_day_bot.users import save_users, get_name
 
 
 def load_winner_info(chat_id):
@@ -71,9 +71,9 @@ def check_save_winner(context, chat_id, users):
         save_users(chat_id, users)
 
     else:
-        old_winner = users[cur_winner['winner_id']]['name']
+        old_winner = get_name(users, cur_winner['winner_id'])
         context.bot.send_message(
             chat_id=chat_id,
-            text=f"про сегодня уже все понятно: победил(-а) {old_winner} \N{winking face}"
+            text=f"про сегодня уже все понятно: победил(-а) {old_winner}. Возвращайся завтра \N{winking face}"
         )
 
