@@ -22,9 +22,9 @@ def save_users(chat_id, users):
 
 def get_name(users, user_id_str):
     fullname = users[user_id_str]['fullname']
-    if users[user_id_str]['name']:
-        name = users[user_id_str]['name']
-        return f'{fullname} ({name})'
+    if users[user_id_str]['username']:
+        username = users[user_id_str]['username']
+        return f'{fullname} (@{username})'
     else:
         return fullname
 
