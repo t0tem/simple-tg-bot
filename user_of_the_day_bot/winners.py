@@ -1,9 +1,11 @@
 import json
 import os
 import random
+import time
 
 from user_of_the_day_bot import settings
 from user_of_the_day_bot.utils import get_cur_date, get_date, get_now
+from user_of_the_day_bot.users import save_users
 
 
 def load_winner_info(chat_id):
@@ -27,6 +29,10 @@ def get_random_winner(users):
     return random_user_id
 
 
+def get_random_phrases():
+    return random.choice(settings.WINNER_ANNOUNCEMENTS)
+
+
 def check_save_winner(context, chat_id, users):
     cur_winner = load_winner_info(chat_id)
     last_win_time = cur_winner.get('win_time', '2021-01-01T01:01:01.001')
@@ -35,19 +41,39 @@ def check_save_winner(context, chat_id, users):
 
     if cur_date > last_win_date:
         winner_id = get_random_winner(users)
-        # TODO апдейт каунтов побед
+
+        # сохраняем инфо и победителе
         cur_winner = {
             'win_time': get_now(),
             'winner_id': winner_id
         }
-        context.bot.send_message(
-            chat_id=chat_id,
-            text=f"и... выиграл(-а), {users[winner_id]['name']}!"  # TODO сюда смешные фразы
-        )
         save_winner_info(chat_id, cur_winner)
-    else:
+
+        # получаем строку с именем победителя
+        winner_name = f"{users[winner_id]['fullname']} ({users[winner_id]['name']})"
+
+        # получаем 2 фразы
+        phrase1, phrase2 = get_random_phrases()
+
+        # отправляем
         context.bot.send_message(
             chat_id=chat_id,
-            text=f"про сегодня уже все понятно: победил(-а) {users[cur_winner['winner_id']]['name']}."
+            text=phrase1
+        )
+        time.sleep(2)
+        context.bot.send_message(
+            chat_id=chat_id,
+            text=phrase2.format(winner_name)
+        )
+
+        # апдейтим каунты побед
+        users[winner_id]['win_count'] += 1
+        save_users(chat_id, users)
+
+    else:
+        old_winner = users[cur_winner['winner_id']]['name']
+        context.bot.send_message(
+            chat_id=chat_id,
+            text=f"про сегодня уже все понятно: победил(-а) {old_winner} \N{winking face}"
         )
 

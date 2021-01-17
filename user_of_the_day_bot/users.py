@@ -32,7 +32,7 @@ def check_reg_user(context, chat_id, effective_user):
         # отвечаем что уже есть
         context.bot.send_message(
             chat_id=chat_id,
-            text=f'так ты уже зареген(-а), {effective_user.name}!'
+            text=f'ты уже есть в списке игроков, {effective_user.name}!'
         )
     else:
         # инача добавляем и говорим что добавлен
@@ -65,17 +65,26 @@ def check_delete_user(context, chat_id, effective_user):
 
         context.bot.send_message(
             chat_id=chat_id,
-            text=f'ты больше не играешь, {effective_user.name} :( приходи еще!'
+            text=f'ты больше не играешь, {effective_user.name} \N{slightly frowning face} приходи еще!'
         )
     else:
         # иначе говорим что и не было
         context.bot.send_message(
             chat_id=chat_id,
-            text=f'так ты и не играл(-а), {effective_user.name}!'
+            text=f'хм, а тебя и так нет среди игроков, {effective_user.name}.'
         )
 
     # пересохраняем юзеров
     save_users(chat_id, users)
+
+
+def get_name(users, user_id_str):
+    fullname = users[user_id_str]['fullname']
+    if users[user_id_str]['name']:
+        name = users[user_id_str]['name']
+        return f'{fullname} ({name})'
+    else:
+        return fullname
 
 
 def list_users(context, chat_id):
@@ -84,10 +93,27 @@ def list_users(context, chat_id):
     users = load_users(chat_id)
 
     # формируем строку с юзерами
-    list_of_users_str = '\n'.join([f"{v['fullname']} ({v['name']})" for k, v in users.items()])
+    list_of_users_str = '\n'.join([get_name(users, user_id_str) for user_id_str in users])
 
     context.bot.send_message(
         chat_id=chat_id,
         text=f'Сейчас в игре {len(users)} человек(-а):\n{list_of_users_str}',
     )
 
+
+def get_top_users(context, chat_id):
+    # грузим список юзеров, зарегеных из этого чата
+    users = load_users(chat_id)
+
+    # получаем айдишники юзеров и кол-во побед по-убыванию
+    top_users_tuples = sorted(
+        [(id_, v['win_count']) for id_, v in users.items() if v['win_count'] > 0],
+        key=lambda x: x[1],
+        reverse=True,
+    )
+    top_users_stats = [f"{i+1}) {get_name(users, el[0])} - {el[1]} раз(-а)" for i, el in enumerate(top_users_tuples)]
+    top_users_stats_str = '\n'.join(top_users_stats)
+    context.bot.send_message(
+        chat_id=chat_id,
+        text=f'\U0001F389 Текущие результаты игры Красавчик Дня:\n{top_users_stats_str}',
+    )
