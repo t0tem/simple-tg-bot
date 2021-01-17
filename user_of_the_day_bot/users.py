@@ -72,14 +72,14 @@ def check_delete_user(context, chat_id, effective_user):
         # удаляем и говорим что удален
         context.bot.send_message(
             chat_id=chat_id,
-            text=f'ты больше не играешь, {get_name(users, user_id_str)} \N{slightly frowning face} приходи еще!'
+            text=f'ты больше не играешь, {effective_user.fullname} \N{slightly frowning face} приходи еще!'
         )
         del users[user_id_str]
     else:
         # иначе говорим что и не было
         context.bot.send_message(
             chat_id=chat_id,
-            text=f'хм, а тебя и так нет среди игроков, {get_name(users, user_id_str)}.'
+            text=f'хм, а тебя и так нет среди игроков, {effective_user.fullname}.'
         )
 
     # пересохраняем юзеров
