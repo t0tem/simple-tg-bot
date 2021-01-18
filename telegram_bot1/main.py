@@ -19,7 +19,7 @@ def get_dog_image_url():
 
 
 def get_cat_image_url():
-    contents = requests.get('http://aws.random.cat/meow').json()
+    contents = requests.get('http://aws.random.cat/meow?ref=apilist.fun').json()
     url = contents['file']
     return url
 
