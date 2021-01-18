@@ -39,7 +39,9 @@ def user_stats(update, context):
 
 
 def main():
-    updater = Updater('1517671056:AAHeSH3_GgeoQC_91UUEnMxwQnnLpcIOefQ', use_context=True)
+    with open('user_of_the_day_bot.token', 'r') as f:
+        token = f.read()
+    updater = Updater(token, use_context=True)
     dp = updater.dispatcher
     dp.add_handler(CommandHandler('reg', user_reg))
     dp.add_handler(CommandHandler('delete_me', user_del))
