@@ -38,7 +38,7 @@ def meow(update, context):
 
 def main():
     with open('random_dog_bot.token', 'r') as f:
-        token = f.read()
+        token = f.read().strip()
     updater = Updater(token, use_context=True)
     dp = updater.dispatcher
     dp.add_handler(CommandHandler('random_dog', gav, run_async=True))

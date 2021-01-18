@@ -40,7 +40,7 @@ def user_stats(update, context):
 
 def main():
     with open('user_of_the_day_bot.token', 'r') as f:
-        token = f.read()
+        token = f.read().strip()
     updater = Updater(token, use_context=True)
     dp = updater.dispatcher
     dp.add_handler(CommandHandler('reg', user_reg))
