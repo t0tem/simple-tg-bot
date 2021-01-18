@@ -50,7 +50,7 @@ def check_save_winner(context, chat_id, users):
         save_winner_info(chat_id, cur_winner)
 
         # получаем строку с именем победителя
-        winner_name = f"{users[winner_id]['fullname']} ({users[winner_id]['name']})"
+        winner_name = get_name(users, winner_id)
 
         # получаем 2 фразы
         phrase1, phrase2 = get_random_phrases()
