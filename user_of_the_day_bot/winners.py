@@ -5,7 +5,7 @@ import time
 
 from user_of_the_day_bot import settings
 from user_of_the_day_bot.utils import get_cur_date, get_date, get_now
-from user_of_the_day_bot.users import save_users, get_name
+from user_of_the_day_bot.users import save_users, get_long_name, get_short_name
 
 
 def load_winner_info(chat_id):
@@ -50,7 +50,7 @@ def check_save_winner(context, chat_id, users):
         save_winner_info(chat_id, cur_winner)
 
         # получаем строку с именем победителя
-        winner_name = get_name(users, winner_id)
+        winner_name = get_long_name(users, winner_id)
 
         # получаем 2 фразы
         phrase1, phrase2 = get_random_phrases()
@@ -71,7 +71,7 @@ def check_save_winner(context, chat_id, users):
         save_users(chat_id, users)
 
     else:
-        old_winner = get_name(users, cur_winner['winner_id'])
+        old_winner = get_short_name(users, cur_winner['winner_id'])
         context.bot.send_message(
             chat_id=chat_id,
             text=f"Cегодня уже все понятно: победил(-а) {old_winner}. Возвращайся завтра \N{winking face}"

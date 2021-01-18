@@ -20,13 +20,17 @@ def save_users(chat_id, users):
         json.dump(users, f)
 
 
-def get_name(users, user_id_str):
+def get_long_name(users, user_id_str):
     fullname = users[user_id_str]['fullname']
     if users[user_id_str]['username']:
         username = users[user_id_str]['username']
         return f'{fullname} (@{username})'
     else:
         return fullname
+
+
+def get_short_name(users, user_id_str):
+    return users[user_id_str]['fullname']
 
 
 def check_reg_user(context, chat_id, effective_user):
@@ -92,7 +96,7 @@ def list_users(context, chat_id):
     users = load_users(chat_id)
 
     # формируем строку с юзерами
-    list_of_users_str = '\n'.join([get_name(users, user_id_str) for user_id_str in users])
+    list_of_users_str = '\n'.join([get_short_name(users, user_id_str) for user_id_str in users])
 
     context.bot.send_message(
         chat_id=chat_id,
@@ -110,7 +114,11 @@ def get_top_users(context, chat_id):
         key=lambda x: x[1],
         reverse=True,
     )
-    top_users_stats = [f"{i+1}) {get_name(users, el[0])} - {el[1]} раз(-а)" for i, el in enumerate(top_users_tuples)]
+    top_users_stats = [
+        f"{i+1}) {get_short_name(users, el[0])} - {el[1]} раз(-а)"
+        for i, el
+        in enumerate(top_users_tuples)
+    ]
     top_users_stats_str = '\n'.join(top_users_stats)
     context.bot.send_message(
         chat_id=chat_id,
