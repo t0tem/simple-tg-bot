@@ -46,7 +46,8 @@ def get_random_winner(users):
 
 
 def get_random_phrases():
-    return np.random.choice(settings.WINNER_ANNOUNCEMENTS)
+    idx = np.random.choice(len(settings.WINNER_ANNOUNCEMENTS))
+    return settings.WINNER_ANNOUNCEMENTS[idx]
 
 
 def check_save_winner(context, chat_id, users):
