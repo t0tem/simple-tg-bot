@@ -7,7 +7,11 @@ from user_of_the_day_bot.users import (
     load_users,
     get_top_users,
 )
-from user_of_the_day_bot.winners import check_save_winner
+from user_of_the_day_bot.winners import (
+    check_save_winner,
+    get_random_user,
+    get_random_phrases,
+)
 
 
 def user_reg(update, context):
@@ -38,6 +42,21 @@ def user_stats(update, context):
     get_top_users(context, chat_id)
 
 
+def random_user(update, context):
+    chat_id = update.message.chat_id
+    users = load_users(chat_id)
+    get_random_user(context, chat_id, users)
+
+
+def random_phrases(update, context):
+    chat_id = update.message.chat_id
+    phrases = get_random_phrases()
+    context.bot.send_message(
+        chat_id=chat_id,
+        text='\n'.join(phrases)
+    )
+
+
 def main():
     with open('user_of_the_day_bot.token', 'r') as f:
         token = f.read().strip()
@@ -48,6 +67,8 @@ def main():
     dp.add_handler(CommandHandler('players', user_list))
     dp.add_handler(CommandHandler('run', get_winner))
     dp.add_handler(CommandHandler('stats', user_stats))
+    dp.add_handler(CommandHandler('random_user', random_user))
+    dp.add_handler(CommandHandler('random_phrases', random_phrases))
     updater.start_polling()
     updater.idle()
 

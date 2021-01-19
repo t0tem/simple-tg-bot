@@ -77,3 +77,12 @@ def check_save_winner(context, chat_id, users):
             text=f"Cегодня уже все понятно: победил(-а) {old_winner}. Возвращайся завтра \N{winking face}"
         )
 
+
+def get_random_user(context, chat_id, users):
+    winner_id = get_random_winner(users)
+    winner_name = get_short_name(users, winner_id)
+
+    context.bot.send_message(
+        chat_id=chat_id,
+        text=winner_name
+    )
