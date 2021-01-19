@@ -1,7 +1,9 @@
 import json
 import os
-import random
 import time
+
+import numpy as np
+from scipy.special import softmax
 
 from user_of_the_day_bot import settings
 from user_of_the_day_bot.utils import get_cur_date, get_date, get_now
@@ -25,12 +27,26 @@ def save_winner_info(chat_id, cur_winner):
 
 
 def get_random_winner(users):
-    random_user_id = random.choice(sorted(users))
-    return random_user_id
+    """
+    не настоящий рандом, более _справедливый_. вероятности зависят от количества предыдущих побед.
+    :param users:
+    :return:
+    """
+    user_ids = []
+    prev_win_cnts = []
+
+    for k, v in users.items():
+        user_ids.append(k)
+        prev_win_cnts.append(-v['win_count'])  # добавляем отрицательный каунт на 'инвертированного' softmax
+
+    probs = softmax(prev_win_cnts)
+    winner_id = np.random.choice(user_ids, p=probs)
+
+    return winner_id
 
 
 def get_random_phrases():
-    return random.choice(settings.WINNER_ANNOUNCEMENTS)
+    return np.random.choice(settings.WINNER_ANNOUNCEMENTS)
 
 
 def check_save_winner(context, chat_id, users):
@@ -79,6 +95,8 @@ def check_save_winner(context, chat_id, users):
 
 
 def get_random_user(context, chat_id, users):
+    """просто получить рандомного юзера, ничего не апдейтим"""
+
     winner_id = get_random_winner(users)
     winner_name = get_short_name(users, winner_id)
 
