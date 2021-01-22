@@ -41,6 +41,7 @@ def get_random_winner(users):
 
     probs = softmax(prev_win_cnts)
     print(f'user_ids: {user_ids}')
+    print(f"user_names: {[users[x]['fullname'] for x in user_ids]}")
     print(f'prev_win_cnts: {prev_win_cnts}')
     print(f'probs: {probs}')
     winner_id = np.random.choice(user_ids, p=probs)
