@@ -40,6 +40,9 @@ def get_random_winner(users):
         prev_win_cnts.append(-v['win_count'])  # добавляем отрицательный каунт на 'инвертированного' softmax
 
     probs = softmax(prev_win_cnts)
+    print(f'user_ids: {user_ids}')
+    print(f'prev_win_cnts: {prev_win_cnts}')
+    print(f'probs: {probs}')
     winner_id = np.random.choice(user_ids, p=probs)
 
     return winner_id
@@ -57,6 +60,8 @@ def check_save_winner(context, chat_id, users):
     cur_date = get_cur_date()
 
     if cur_date > last_win_date:
+        print(f'cur_date: {cur_date}')
+        print(f'chait_id: {chat_id}')
         winner_id = get_random_winner(users)
 
         # сохраняем инфо и победителе
