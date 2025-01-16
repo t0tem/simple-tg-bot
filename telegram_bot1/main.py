@@ -1,4 +1,6 @@
 import logging
+import os
+from dotenv import load_dotenv
 from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
 from telegram.ext import Application, CommandHandler, ContextTypes
 from telegram_bot1.images import (
@@ -8,7 +10,9 @@ from telegram_bot1.images import (
     get_red_panda_image_url,
     get_koala_image_url,
 )
-import os
+
+
+load_dotenv()
 
 async def gav(update: Update, context: ContextTypes.DEFAULT_TYPE):
     url = get_dog_image_url()
@@ -32,7 +36,7 @@ async def random_koala(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if context.args and context.args[0] == 'webapp':
-        keyboard = [[InlineKeyboardButton("Open MiniApp", web_app={'url': os.getenv['MINIAPP_URL']})]]
+        keyboard = [[InlineKeyboardButton("Open MiniApp", web_app={'url': os.getenv('MINIAPP_URL')})]]
         reply_markup = InlineKeyboardMarkup(keyboard)
         await update.message.reply_text("Welcome! Click the button to open the MiniApp:", reply_markup=reply_markup)
     else:
